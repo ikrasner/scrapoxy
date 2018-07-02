@@ -93,7 +93,7 @@ module.exports = class Master {
                 agent: self._proxyAgent,
                 proxy: instance.proxyParameters,
             });
-
+            winston.debug(`[Master] request: performing request: ${proxyOpts.method} ${proxyOpts.host}/${proxyOpts.path} through ${instance}`);
             const proxy_req = http.request(proxyOpts);
 
             proxy_req.on('error', (err) => {
@@ -193,7 +193,6 @@ module.exports = class Master {
             // Find instance
             const forceName = req.headers['x-cache-proxyname'],
                 instance = self._manager.getNextRunningInstanceForDomain(basedomain, forceName);
-
             if (!instance) {
                 return writeEnd(socket, 407, '[Master] Error: No running instance found');
             }
@@ -223,7 +222,7 @@ module.exports = class Master {
                 agent: self._agent, // Don't use the proxy agent
                 headers: {},
             };
-
+            winston.debug(`[Master] connect: performing request: ${proxyOpts.method} ${proxyOpts.host}/${proxyOpts.path} through ${instance}`);
             const proxy_req = http.request(proxyOpts);
 
             proxy_req.on('error', (err) => {
